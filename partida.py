@@ -1,19 +1,33 @@
 import random
 
-def obtener_palabras():
-    # Lista de palabras para el juego
-    lista = ["Manzana", "Pizza", "Delfín", "Coche", "Guitarra"]
-    secreta = random.choice(lista)
-    return secreta
+def obtener_modalidades():
+    return [
+        "Clásica", "Animales", "Comida", "Lugares", "Tecnología", 
+        "Videojuegos", "Cine y Series", "Mitología", "Deportes", 
+        "Profesiones", "Ciencia y Espacio"
+    ]
 
-def asignar_roles(num_jugadores, palabra_secreta):
-    # Elegimos un número al azar para ser el impostor
-    id_impostor = random.randint(1, num_jugadores)
-    roles = {}
+def generar_partida(modalidad, n_jugadores):
+    datos = {
+        "Clásica": {"Espejo": "Reflejo", "Reloj": "Agujas", "Libro": "Páginas", "Dinero": "Banco", "Cama": "Sueño", "Luz": "Bombilla", "Fuego": "Humo", "Tijeras": "Cortar", "Maleta": "Viaje", "Llave": "Cerradura", "Mapa": "Ruta", "Brújula": "Norte", "Cámara": "Foto", "Guitarra": "Cuerdas", "Paraguas": "Lluvia", "Gafas": "Vista", "Teléfono": "Llamada", "Martillo": "Clavo", "Escoba": "Suelo", "Vela": "Cera", "Diario": "Secreto", "Billete": "Tren", "Carta": "Sobre", "Jabón": "Burbujas", "Pintura": "Pincel", "Radio": "Emisora", "Botella": "Tapón", "Cubo": "Agua", "Silla": "Asiento", "Lápiz": "Mina"},
+        "Animales": {"Tigre": "Rayas", "Delfín": "Aleta", "León": "Melena", "Lobo": "Luna", "Tiburón": "Dientes", "Búho": "Noche", "Vaca": "Leche", "Águila": "Vuelo", "Serpiente": "Veneno", "Jirafa": "Cuello", "Elefante": "Trompa", "Pingüino": "Hielo", "Canguro": "Bolsa", "Mono": "Plátano", "Caballo": "Herradura", "Perro": "Ladrido", "Gato": "Maullido", "Abeja": "Miel", "Mariposa": "Alas", "Araña": "Tela", "Oso": "Cueva", "Cocodrilo": "Pantano", "Rana": "Salto", "Pulpo": "Tentáculos", "Ballena": "Océano", "Camello": "Joroba", "Zorro": "Cola", "Loro": "Hablar", "Murciélago": "Cueva", "Rinoceronte": "Cuerno"},
+        "Comida": {"Pizza": "Horno", "Sushi": "Palillos", "Chocolate": "Cacao", "Helado": "Frío", "Taco": "Picante", "Queso": "Ratón", "Pasta": "Trigo", "Hamburguesa": "Carne", "Manzana": "Árbol", "Pan": "Harina", "Arroz": "Grano", "Huevo": "Gallina", "Leche": "Vaso", "Café": "Taza", "Té": "Tetera", "Vino": "Uva", "Cerveza": "Espuma", "Pastel": "Vela", "Sopa": "Cuchara", "Ensalada": "Lechuga", "Limón": "Ácido", "Naranja": "Vitamina", "Plátano": "Potasio", "Fresa": "Roja", "Uva": "Racimo", "Pollo": "Alas", "Pescado": "Escamas", "Azúcar": "Dulce", "Sal": "Mar", "Aceite": "Oliva"},
+        "Lugares": {"Egipto": "Pirámide", "París": "Torre", "Cine": "Pantalla", "Playa": "Arena", "Bosque": "Musgo", "Luna": "Cráter", "Desierto": "Oasis", "Montaña": "Cumbre", "Selva": "Lianas", "Ciudad": "Tráfico", "Granja": "Tractor", "Hospital": "Camilla", "Colegio": "Pizarra", "Biblioteca": "Silencio", "Museo": "Arte", "Estadio": "Gol", "Aeropuerto": "Maleta", "Puerto": "Barco", "Castillo": "Muralla", "Iglesia": "Campana", "Banco": "Cajero", "Parque": "Columpio", "Zoo": "Jaula", "Circo": "Payaso", "Teatro": "Actriz", "Gimnasio": "Pesas", "Piscina": "Cloro", "Isla": "Palmera", "Volcán": "Lava", "Cueva": "Eco"},
+        "Tecnología": {"Móvil": "Pantalla", "Ordenador": "Ratón", "Internet": "Wifi", "Robot": "Metal", "Batería": "Carga", "Cámara": "Lente", "Altavoz": "Sonido", "Drone": "Hélice", "Reloj": "Inteligente", "Cascos": "Música", "Consola": "Mando", "Tableta": "Táctil", "Satélite": "Órbita", "Microchip": "Silicio", "Impresora": "Tinta", "USB": "Memoria", "Cable": "Corriente", "Enchufe": "Pared", "Teclado": "Mecánico", "Monitor": "Píxel", "Software": "Código", "App": "Icono", "Nube": "Servidor", "Realidad": "Virtual", "Inteligencia": "Artificial", "Hacker": "Teclado", "Coche": "Eléctrico", "Radar": "Señal", "GPS": "Mapa", "Bluetooth": "Onda"},
+        "Videojuegos": {"Mario": "Gorra", "Zelda": "Espada", "Pokémon": "Bola", "Tetris": "Bloques", "Minecraft": "Cubos", "Fortnite": "Baile", "Sonic": "Anillos", "Pac-Man": "Fantasma", "GTA": "Coche", "Halo": "Casco", "FIFA": "Balón", "Kratos": "Hacha", "Link": "Escudo", "Bowser": "Caparazón", "Pikachu": "Rayo", "Kirby": "Rosa", "Donkey": "Kong", "Ryu": "Lucha", "Snake": "Caja", "Geralt": "Brujo", "Master": "Chief", "Spyro": "Dragón", "Crash": "Bandicoot", "Lara": "Croft", "Nathan": "Drake", "Joel": "Ellie", "Arthur": "Morgan", "Aloy": "Arco", "Steve": "Pico", "Sans": "Hueso"},
+        "Cine y Series": {"Batman": "Capa", "Joker": "Risa", "Vader": "Sable", "Potter": "Varita", "Stark": "Armadura", "Bond": "Agente", "Marvel": "Cómic", "Disney": "Ratón", "Oscar": "Estatua", "Zombi": "Cerebro", "Vampiro": "Colmillos", "Pirata": "Parche", "Alien": "Espacio", "Predator": "Selva", "Gandalf": "Mago", "Gollum": "Anillo", "Shrek": "Ogro", "Simba": "Rey", "Elsa": "Hielo", "Woody": "Vaquero", "Buzz": "Astral", "Hulk": "Verde", "Thor": "Martillo", "Thanos": "Guante", "Neo": "Matrix", "Titanic": "Barco", "Jaws": "Tiburón", "Rocky": "Boxeo", "Rambo": "Cuchillo", "Terminator": "Robot"},
+        "Mitología": {"Zeus": "Rayo", "Poseidón": "Tridente", "Hades": "Inframundo", "Hércules": "Fuerza", "Odín": "Ojo", "Thor": "Trueno", "Loki": "Mentira", "Medusa": "Serpientes", "Minotauro": "Laberinto", "Dragón": "Fuego", "Unicornio": "Cuerno", "Sirena": "Canto", "Centauro": "Mitad", "Elfo": "Orejas", "Enano": "Barba", "Orco": "Colmillos", "Troll": "Puente", "Fénix": "Cenizas", "Hidra": "Cabezas", "Pegaso": "Alas", "Olimpo": "Dioses", "Valhalla": "Guerreros", "Anubis": "Chacal", "Ra": "Sol", "Bastet": "Gato", "Isis": "Magia", "Osiris": "Muerte", "Horus": "Halcón", "Atenea": "Búho", "Ares": "Guerra"},
+        "Deportes": {"Fútbol": "Balón", "Baloncesto": "Canasta", "Tenis": "Raqueta", "Golf": "Hoyo", "Béisbol": "Bate", "Boxeo": "Guantes", "Natación": "Gafas", "Ciclismo": "Casco", "Atletismo": "Pista", "Esquí": "Nieve", "Surf": "Tabla", "Skate": "Ruedas", "Yoga": "Esterilla", "Karate": "Cinturón", "Ajedrez": "Rey", "Billar": "Taco", "Dardos": "Diana", "Pesca": "Caña", "Remo": "Bote", "Rugby": "Ovalado", "Hockey": "Stick", "Voleibol": "Red", "Pádel": "Pala", "Fórmula": "Uno", "Moto": "GP", "Maratón": "Meta", "Escalada": "Cuerda", "Gimnasia": "Barra", "Esgrima": "Florete", "Ping-Pong": "Paleta"},
+        "Profesiones": {"Médico": "Bata", "Bombero": "Manguera", "Policía": "Placa", "Chef": "Gorro", "Piloto": "Avión", "Astronauta": "Casco", "Profesor": "Tiza", "Juez": "Martillo", "Pintor": "Cuadro", "Músico": "Notas", "Actor": "Guion", "Escritor": "Pluma", "Granjero": "Azada", "Albañil": "Ladrillo", "Científico": "Tubo", "Abogado": "Ley", "Fotógrafo": "Flash", "Bailarín": "Puntas", "Dentista": "Muelas", "Veterinario": "Perro", "Mecánico": "Llave", "Soldado": "Fusil", "Marinero": "Ancla", "Panadero": "Masa", "Carnicero": "Cuchillo", "Jardinero": "Flores", "Cartero": "Cartas", "Arquitecto": "Plano", "Ingeniero": "Casco", "Barrendero": "Escoba"},
+        "Ciencia y Espacio": {"Tierra": "Vida", "Marte": "Rojo", "Saturno": "Anillos", "Júpiter": "Mancha", "Sol": "Calor", "Estrella": "Luz", "Cometa": "Cola", "Agujero": "Negro", "Galaxia": "Espiral", "Astronauta": "Traje", "Cohete": "Motor", "Telescopio": "Lente", "Microscopio": "Célula", "Átomo": "Núcleo", "ADN": "Hélice", "Evolución": "Darwin", "Gravedad": "Newton", "Relatividad": "Einstein", "Electricidad": "Rayo", "Magnetismo": "Imán", "Química": "Mezcla", "Física": "Energía", "Biología": "Vida", "Geología": "Piedras", "Volcán": "Magma", "Terremoto": "Sismo", "Tsunami": "Ola", "Tornado": "Viento", "Huracán": "Ojo", "Sonda": "Espacial"}
+    }
     
-    for i in range(1, num_jugadores + 1):
-        if i == id_impostor:
-            roles[i] = "Eres el IMPOSTOR. ¡Miente!"
-        else:
-            roles[i] = f"La palabra es: {palabra_secreta}"
-    return roles
+    tema = datos.get(modalidad, datos["Clásica"])
+    claves = list(tema.keys())
+    random.shuffle(claves)
+    
+    palabra = claves[0]
+    pista = tema[palabra]
+    impostor = random.randint(1, n_jugadores)
+    
+    return palabra, pista, impostor
